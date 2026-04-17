@@ -366,4 +366,555 @@
       justify-content: center;
       backdrop-filter: blur(4px);
     }
-    .custom-alert
+    .custom-alert-overlay.active { display: flex; }
+    
+    .custom-alert {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      max-width: 90%;
+      width: 320px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+    }
+    
+    .custom-alert-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-100);
+    }
+    
+    .custom-alert-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.2rem; flex-shrink: 0;
+    }
+    
+    .custom-alert-title {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--primary-800); margin: 0;
+    }
+    
+    .custom-alert-message {
+      font-size: 0.95rem; color: var(--gray-700);
+      line-height: 1.5; margin-bottom: 1.25rem;
+    }
+    
+    .custom-alert-button {
+      width: 100%; padding: 0.75rem;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+      color: white; border: none;
+      border-radius: var(--radius);
+      font-weight: 600; font-size: 0.95rem;
+      cursor: pointer; transition: var(--transition);
+    }
+    .custom-alert-button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+    .custom-alert-button:active { transform: scale(0.98); }
+
+    /* 🖨️ Impresión */
+    @media print {
+      body { background: white !important; padding: 0 !important; font-size: 9pt !important; }
+      .card-form-modern, .btn-generar, .btn-imprimir, .footer-text, 
+      .header-modern .back-btn, .dias-calculo, .menu-container, .footer-note,
+      .custom-alert-overlay { display: none !important; }
+      .module.active-module { display: block !important; background: white; }
+      .financing-table, .tabla-calendario {
+        box-shadow: none !important; border: 1px solid #000 !important; font-size: 8pt !important;
+      }
+      .financing-table th, .tabla-calendario th {
+        background: #1e40af !important; color: white !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+    }
+
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+      input, select { font-size: 16px !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <!-- MENÚ PRINCIPAL -->
+  <div id="menuPrincipal" class="menu-container">
+    <div class="content-wrapper">
+      <div class="logo-area">
+        <div class="logo-svg">
+          <img src="logo.png" alt="San Gaspar">
+        </div>
+        <div class="logo-text">SAN GASPAR R.L.</div>
+        <div class="logo-sub">COOPERATIVA DE AHORRO Y CRÉDITO</div>
+      </div>
+      <div class="buttons-group">
+        <button id="btnCredito" class="btn btn-credito">
+          <span>💳</span><span>Crédito</span>
+        </button>
+        <button id="btnAhorros" class="btn btn-ahorros">
+          <span>🏦</span><span>Ahorros</span>
+        </button>
+      </div>
+      <div class="footer-note">📱 Cotizador | Crédito · Ahorros</div>
+    </div>
+  </div>
+
+  <!-- MÓDULO CRÉDITOS -->
+  <div id="module-creditos" class="module">
+    <div class="header-modern">
+      <button class="back-btn" onclick="mostrarMenu()">← Volver</button>
+      <h1>COTIZADOR DE CRÉDITOS</h1>
+      <img src="logo.png" class="logo-small" onerror="this.style.display='none'" alt="logo">
+    </div>
+    <div class="card-form-modern">
+      <div class="form-row">
+        <div class="input-group">
+          <label>💰 MONTO</label>
+          <input type="text" id="monto" class="field-modern" placeholder="1,000" inputmode="decimal">
+        </div>
+        <div class="input-group">
+          <label>📊 TASA</label>
+          <select id="tasa" class="select-modern">
+            <option value="24">2.00% PRINCIPAL</option>
+            <option value="20">1.67% DEPOSITARIA</option>
+            <option value="20">1.67% MASVI</option>
+            <option value="27.60">2.30% INMEDIATO</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="table-container">
+      <table class="financing-table" id="tablaResultados">
+        <thead>
+          <tr>
+            <th>PLAZO</th>
+            <th>CUOTA</th>
+            <th>INTERÉS</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody id="tablaBody">
+          <tr><td colspan="4" style="text-align:center;padding:1rem">💰 Ingrese un monto</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-text">COTIZADOR SG v2.1</div>
+  </div>
+
+  <!-- MÓDULO AHORROS -->
+  <div id="module-ahorros" class="module">
+    <div class="header-modern">
+      <button class="back-btn" onclick="mostrarMenu()">← Volver</button>
+      <h1>COTIZADOR DE AHORROS</h1>
+      <img src="logo.png" class="logo-small" onerror="this.style.display='none'" alt="logo">
+    </div>
+    <div class="card-form-modern card-form-ahorros">
+      <div class="form-row">
+        <div class="input-group">
+          <label>🏦 PRODUCTO</label>
+          <select id="productoAhorro" class="select-modern">
+            <option value="">Seleccione...</option>
+            <option value="corriente">A. Corriente (6%)</option>
+            <option value="infanto">A. Infanto (5%)</option>
+            <option value="plazofijo">Plazo Fijo</option>
+            <option value="plazofijo_pref">PF Preferencial</option>
+            <option value="inversion_f1">Inversiones F.I</option>
+            <option value="inversion_f2">Inversiones F.II</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>💰 MONTO</label>
+          <input type="text" id="montoAhorro" class="field-modern" placeholder="10,000" inputmode="decimal">
+        </div>
+        <div class="input-group" id="plazoGroup" style="display:none">
+          <label>⏱️ PLAZO</label>
+          <select id="plazoAhorro" class="select-modern">
+            <option value="6">6 MESES</option>
+            <option value="12">12 MESES</option>
+            <option value="24">24 MESES</option>
+          </select>
+        </div>
+        <div class="input-group" id="frecuenciaGroup" style="display:none">
+          <label>📅 MODALIDAD</label>
+          <select id="frecuenciaAhorro" class="select-modern">
+            <option value="mensual">Mensual</option>
+            <option value="trimestral">Trimestral</option>
+            <option value="semestral">Semestral</option>
+            <option value="anual">Anual</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" id="fechasGroup" style="display:none">
+        <div class="input-group">
+          <label>📅 INICIO</label>
+          <input type="date" id="fechaInicioAhorro" class="field-modern">
+        </div>
+        <div class="input-group">
+          <label>📅 FINAL</label>
+          <input type="date" id="fechaFinAhorro" class="field-modern">
+        </div>
+      </div>
+      <button id="btnGenerarAhorro" class="btn-generar">🧮 Generar</button>
+    </div>
+    <div class="table-container" id="resultadosAhorro" style="display:none">
+      <div id="diasCalculoContainer" class="dias-calculo" style="display:none"></div>
+      <div id="tablaCalendarioContainer"></div>
+      <div id="infoBoxAhorro" class="info-box"></div>
+      <button id="btnImprimirAhorro" class="btn-imprimir" style="display:none">🖨️ Imprimir</button>
+    </div>
+    <div class="footer-text">COTIZADOR SG · ISR 10%</div>
+  </div>
+
+  <!-- 🚨 MODAL DE ALERTA PERSONALIZADO -->
+  <div id="customAlert" class="custom-alert-overlay">
+    <div class="custom-alert">
+      <div class="custom-alert-header">
+        <div class="custom-alert-icon" id="alertIcon">⚠️</div>
+        <h3 class="custom-alert-title">San Gaspar R.L.</h3>
+      </div>
+      <div class="custom-alert-message" id="alertMessage">Mensaje</div>
+      <button class="custom-alert-button" onclick="cerrarAlerta()">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuPrincipal = document.getElementById('menuPrincipal');
+  const moduleCredito = document.getElementById('module-creditos');
+  const moduleAhorro = document.getElementById('module-ahorros');
+
+  // ========== FUNCIONES DE ALERTA PERSONALIZADA ==========
+  function mostrarAlerta(mensaje, tipo = 'warning') {
+    const alert = document.getElementById('customAlert');
+    const message = document.getElementById('alertMessage');
+    const icon = document.getElementById('alertIcon');
+    const iconos = { warning: '⚠️', error: '❌', success: '✅', info: 'ℹ️' };
+    message.textContent = mensaje;
+    icon.textContent = iconos[tipo] || iconos.warning;
+    alert.classList.add('active');
+  }
+
+  function cerrarAlerta() {
+    document.getElementById('customAlert').classList.remove('active');
+  }
+
+  document.getElementById('customAlert').addEventListener('click', function(e) {
+    if (e.target === this) cerrarAlerta();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarAlerta();
+  });
+
+  // ========== NAVEGACIÓN ==========
+  function navegarA(vista) {
+    menuPrincipal.style.display = 'none';
+    moduleCredito.classList.remove('active-module');
+    moduleAhorro.classList.remove('active-module');
+    if (vista === 'credito') {
+      moduleCredito.classList.add('active-module');
+      renderizarTablaCreditos();
+    } else if (vista === 'ahorro') {
+      moduleAhorro.classList.add('active-module');
+      document.getElementById('resultadosAhorro').style.display = 'none';
+    } else {
+      menuPrincipal.style.display = 'flex';
+    }
+    history.pushState({ vista: vista || 'menu' }, '', '#' + (vista || 'menu'));
+  }
+
+  window.addEventListener('popstate', function(e) {
+    const estado = e.state;
+    if (estado?.vista === 'credito') {
+      moduleCredito.classList.add('active-module');
+      moduleAhorro.classList.remove('active-module');
+      menuPrincipal.style.display = 'none';
+      renderizarTablaCreditos();
+    } else if (estado?.vista === 'ahorro') {
+      moduleAhorro.classList.add('active-module');
+      moduleCredito.classList.remove('active-module');
+      menuPrincipal.style.display = 'none';
+      document.getElementById('resultadosAhorro').style.display = 'none';
+    } else {
+      mostrarMenu();
+    }
+  });
+
+  window.mostrarMenu = function() {
+    menuPrincipal.style.display = 'flex';
+    moduleCredito.classList.remove('active-module');
+    moduleAhorro.classList.remove('active-module');
+    history.replaceState({ vista: 'menu' }, '', '#menu');
+  }
+
+  document.getElementById('btnCredito').onclick = (e) => { e.preventDefault(); navegarA('credito'); };
+  document.getElementById('btnAhorros').onclick = (e) => { e.preventDefault(); navegarA('ahorro'); };
+
+  // ==================== CRÉDITOS ====================
+  const plazosMeses = [12,18,24,36,48,60,72,84,96,108,120];
+
+  function formatMoney(v) {
+    if (isNaN(v) || v === null) return "Q 0.00";
+    return "Q " + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function cleanNumber(v) {
+    if (!v || v === "") return 0;
+    const n = parseFloat(String(v).replace(/[^0-9.]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function calcularCuota(monto, tasaAnual, meses) {
+    if (monto <= 0 || meses <= 0) return 0;
+    const tasaMensual = (tasaAnual / 100) / 12;
+    if (tasaMensual === 0) return monto / meses;
+    const f = Math.pow(1 + tasaMensual, meses);
+    return monto * (tasaMensual * f) / (f - 1);
+  }
+
+  function renderizarTablaCreditos() {
+    const monto = cleanNumber(document.getElementById("monto").value);
+    const tbody = document.getElementById("tablaBody");
+    if (monto === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:1rem">💰 Ingrese un monto</td></tr>`;
+      return;
+    }
+    const tasa = parseFloat(document.getElementById("tasa").value);
+    let html = "";
+    for (let m of plazosMeses) {
+      const cuota = calcularCuota(monto, tasa, m);
+      if (isNaN(cuota)) continue;
+      const total = cuota * m;
+      const interes = total - monto;
+      html += `<tr>
+        <td class="col-plazo">${m}M</td>
+        <td class="col-cuota">${formatMoney(cuota)}</td>
+        <td class="col-interes">${formatMoney(interes)}</td>
+        <td class="col-total">${formatMoney(total)}</td>
+      </tr>`;
+    }
+    tbody.innerHTML = html;
+  }
+
+  const montoInput = document.getElementById("monto");
+  montoInput.addEventListener("input", renderizarTablaCreditos);
+  montoInput.addEventListener("blur", function() {
+    const v = cleanNumber(this.value);
+    if (v > 0) this.value = formatMoney(v);
+    renderizarTablaCreditos();
+  });
+  document.getElementById("tasa").onchange = renderizarTablaCreditos;
+
+  // ==================== AHORROS ====================
+  const productosAhorro = {
+    corriente: { tasa: 6, min: 100, requiereFechas: true, nombre: "Ahorro Corriente", muestraDias: true },
+    infanto: { tasa: 5, min: 100, requiereFechas: true, nombre: "Infanto Juvenil", muestraDias: true },
+    plazofijo: {
+      min: 1000, requiereFechas: false, nombre: "Plazo Fijo", muestraImprimir: false,
+      rangos: [
+        { desde: 1000, hasta: 99999.99, tasas: { 6: 12, 12: 14, 24: 'NA' } },
+        { desde: 100000, hasta: 1999999.99, tasas: { 6: 14, 12: 14, 24: 15 } },
+        { desde: 2000000, hasta: Infinity, tasas: { 6: 14, 12: 15, 24: 16 } }
+      ]
+    },
+    plazofijo_pref: {
+      min: 50000, requiereFechas: false, nombre: "Plazo Fijo Pref.", requiereTabla: true, muestraImprimir: true,
+      rangos: [
+        { desde: 50000, hasta: 99999.99, tasas: { 6: 11, 12: 13, 24: 'NA' } },
+        { desde: 100000, hasta: 1999999.99, tasas: { 6: 12, 12: 13, 24: 14 } },
+        { desde: 2000000, hasta: Infinity, tasas: { 6: 13, 12: 14, 24: 15 } }
+      ],
+      frecuencias: ['mensual','trimestral','semestral','anual']
+    },
+    inversion_f1: { min: 1000000, tasa: 10.5, requiereFechas: false, nombre: "Inversiones F.I", muestraImprimir: false },
+    inversion_f2: {
+      min: 1000000, tasa: 10, requiereFechas: false, nombre: "Inversiones F.II", requiereTabla: true, muestraImprimir: true,
+      frecuencias: ['mensual','trimestral','semestral']
+    }
+  };
+
+  let ultimoResultado = null, ultimoProducto = null;
+
+  function diferenciaDias(f1, f2) { return Math.ceil(Math.abs(f2 - f1) / (1000*60*60*24)); }
+  function agregarMeses(fecha, meses) { const n = new Date(fecha); n.setMonth(n.getMonth() + meses); return n; }
+
+  function formatearFecha(f) {
+    const d = String(f.getDate()).padStart(2,'0');
+    const m = String(f.getMonth()+1).padStart(2,'0');
+    const y = f.getFullYear();
+    return `${d}-${m}-${y}`;
+  }
+
+  function validarMontoPlazo(prod, monto, plazo) {
+    const cfg = productosAhorro[prod];
+    if (!cfg.rangos) return { valido: true, tasa: cfg.tasa };
+    const rango = cfg.rangos.find(r => monto >= r.desde && monto <= r.hasta);
+    if (!rango) return { valido: false, msg: "Monto no aplica" };
+    const tasa = rango.tasas[plazo];
+    if (!tasa || tasa === 'NA') return { valido: false, msg: "Plazo no disponible" };
+    return { valido: true, tasa };
+  }
+
+  function generarTablaCalendario(r, prod) {
+    const cfg = productosAhorro[prod];
+    const freq = { 'mensual':1, 'trimestral':3, 'semestral':6, 'anual':12 };
+    const per = freq[r.frecuencia] || 12;
+    const total = Math.floor(r.plazo / per);
+    const brutoPer = r.bruto / total;
+    const isrPer = r.isr / total;
+    
+    let html = `<h4 style="margin:1rem 0 0.5rem;text-align:center;font-weight:700;color:var(--primary-700)">📅 Calendario - ${cfg.nombre}</h4>
+    <table class="tabla-calendario"><thead><tr><th>#</th><th>Fecha</th><th>Bruto</th><th>ISR</th><th>Neto</th></tr></thead><tbody>`;
+    
+    let fecha = new Date();
+    for (let i=1; i<=total; i++) {
+      html += `<tr>
+        <td>${i}</td>
+        <td>${formatearFecha(fecha)}</td>
+        <td>${formatMoney(brutoPer)}</td>
+        <td style="color:#dc2626">-${formatMoney(isrPer)}</td>
+        <td style="color:#16a34a;font-weight:700">${formatMoney(brutoPer-isrPer)}</td>
+      </tr>`;
+      fecha = agregarMeses(fecha, per);
+    }
+    html += `<tfoot><tr>
+      <td colspan="2"><strong>TOTAL</strong></td>
+      <td><strong>${formatMoney(r.bruto)}</strong></td>
+      <td><strong style="color:#dc2626">-${formatMoney(r.isr)}</strong></td>
+      <td><strong style="color:#16a34a">${formatMoney(r.neto)}</strong></td>
+    </tr></tfoot></table>`;
+    return html;
+  }
+
+  function calcularAhorro() {
+    const prod = document.getElementById('productoAhorro').value;
+    if (!prod) { mostrarAlerta('Seleccione un producto', 'warning'); return; }
+    const cfg = productosAhorro[prod];
+    const monto = cleanNumber(document.getElementById('montoAhorro').value);
+    if (monto < cfg.min || monto === 0) { mostrarAlerta(`Mínimo: ${formatMoney(cfg.min)}`, 'warning'); return; }
+
+    let res = { monto };
+    if (prod === 'corriente' || prod === 'infanto') {
+      const f1 = new Date(document.getElementById('fechaInicioAhorro').value);
+      const f2 = new Date(document.getElementById('fechaFinAhorro').value);
+      if (isNaN(f1) || isNaN(f2) || f2 <= f1) { mostrarAlerta('Verifique las fechas', 'warning'); return; }
+      const dias = diferenciaDias(f1, f2);
+      const bruto = monto * (cfg.tasa/100) * (dias/365);
+      const isr = bruto * 0.10;
+      res = { ...res, tasa: cfg.tasa, dias, bruto, isr, neto: bruto-isr, total: monto+bruto-isr };
+      mostrarResultadoAhorro(res, prod);
+    } else {
+      const plazo = parseInt(document.getElementById('plazoAhorro').value);
+      if (!plazo) { mostrarAlerta('Seleccione un plazo', 'warning'); return; }
+      const valid = validarMontoPlazo(prod, monto, plazo);
+      if (!valid.valido) { mostrarAlerta(valid.msg, 'warning'); return; }
+      const bruto = monto * (valid.tasa/100) * (plazo/12);
+      const isr = bruto * 0.10;
+      const freq = (cfg.frecuencias && document.getElementById('frecuenciaAhorro')) ? document.getElementById('frecuenciaAhorro').value : null;
+      res = { ...res, plazo, tasa: valid.tasa, frecuencia: freq, bruto, isr, neto: bruto-isr, total: monto+bruto-isr };
+      mostrarResultadoAhorro(res, prod);
+    }
+    ultimoResultado = res;
+    ultimoProducto = prod;
+  }
+
+  function mostrarResultadoAhorro(r, prod) {
+    const container = document.getElementById('resultadosAhorro');
+    const calContainer = document.getElementById('tablaCalendarioContainer');
+    const infoBox = document.getElementById('infoBoxAhorro');
+    const btnImprimir = document.getElementById('btnImprimirAhorro');
+    const diasContainer = document.getElementById('diasCalculoContainer');
+    const cfg = productosAhorro[prod];
+    
+    if (cfg.muestraDias && r.dias) {
+      const f1 = document.getElementById('fechaInicioAhorro').value;
+      const f2 = document.getElementById('fechaFinAhorro').value;
+      diasContainer.style.display = 'block';
+      diasContainer.innerHTML = `📆 ${r.dias} días (${f1} a ${f2})`;
+    } else { diasContainer.style.display = 'none'; }
+    
+    if (cfg.requiereTabla && r.frecuencia && r.plazo) {
+      calContainer.innerHTML = generarTablaCalendario(r, prod);
+    } else { calContainer.innerHTML = ''; }
+    
+    btnImprimir.style.display = cfg.muestraImprimir ? 'block' : 'none';
+    
+    infoBox.innerHTML = `<strong>ℹ️ Resumen:</strong><br>
+      • ${cfg.nombre}<br>
+      • Monto: <strong>${formatMoney(r.monto)}</strong><br>
+      • Tasa: <strong>${r.tasa}%</strong><br>
+      • Bruto: ${formatMoney(r.bruto)}<br>
+      • ISR: <span style="color:#dc2626">-${formatMoney(r.isr)}</span><br>
+      • Neto: <span style="color:#16a34a;font-weight:700">${formatMoney(r.neto)}</span><br>
+      • <strong style="color:var(--primary-800)">Total: ${formatMoney(r.total)}</strong>`;
+    
+    container.style.display = 'block';
+  }
+
+  function imprimirAhorro() {
+    if (!ultimoResultado) { mostrarAlerta('Genere la cotización primero', 'warning'); return; }
+    window.print();
+  }
+
+  function actualizarCamposAhorro() {
+    const prod = document.getElementById('productoAhorro').value;
+    document.getElementById('plazoGroup').style.display = 'none';
+    document.getElementById('frecuenciaGroup').style.display = 'none';
+    document.getElementById('fechasGroup').style.display = 'none';
+    document.getElementById('resultadosAhorro').style.display = 'none';
+    document.getElementById('tablaCalendarioContainer').innerHTML = '';
+    if (!prod) return;
+    const cfg = productosAhorro[prod];
+    if (prod === 'corriente' || prod === 'infanto') {
+      document.getElementById('fechasGroup').style.display = 'flex';
+      document.getElementById('fechaInicioAhorro').value = new Date().toISOString().split('T')[0];
+      document.getElementById('fechaFinAhorro').value = '';
+    } else {
+      document.getElementById('plazoGroup').style.display = 'flex';
+      if (cfg.frecuencias) { document.getElementById('frecuenciaGroup').style.display = 'flex'; }
+    }
+  }
+
+  function setupMoneyInput(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    let num = '';
+    input.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/[^0-9.]/g, '');
+      const parts = v.split('.');
+      if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+      if (parts[1]?.length > 2) v = parts[0] + '.' + parts[1].substring(0,2);
+      num = v; e.target.value = v;
+    });
+    input.addEventListener('blur', function(e) {
+      if (num && !isNaN(parseFloat(num))) { e.target.value = formatMoney(parseFloat(num)); }
+      else { e.target.value = ''; num = ''; }
+    });
+    input.addEventListener('focus', function(e) { e.target.value = num; });
+  }
+
+  document.getElementById('productoAhorro').onchange = actualizarCamposAhorro;
+  document.getElementById('btnGenerarAhorro').onclick = calcularAhorro;
+  document.getElementById('btnImprimirAhorro').onclick = imprimirAhorro;
+  setupMoneyInput('montoAhorro');
+
+  window.addEventListener('DOMContentLoaded', () => {
+    history.replaceState({ vista: 'menu' }, '', '#menu');
+    document.getElementById('monto').value = '';
+    document.getElementById('montoAhorro').value = '';
+    renderizarTablaCreditos();
+    actualizarCamposAhorro();
+    mostrarMenu();
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(r => r.unregister());
+      navigator.serviceWorker.register("service-worker.js").catch(e => console.log("SW:", e));
+    });
+  }
+</script>
+</body>
+</html>
