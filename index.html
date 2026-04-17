@@ -2,8 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0">
   <meta name="theme-color" content="#1a56db">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>San Gaspar | Finanzas</title>
   <link rel="manifest" href="manifest.json">
   <style>
@@ -51,7 +53,6 @@
       --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
       
       /* Bordes */
       --radius-sm: 0.375rem;
@@ -62,16 +63,42 @@
       --radius-full: 9999px;
       
       /* Transiciones */
-      --transition-fast: 150ms ease;
       --transition: 200ms ease;
-      --transition-slow: 300ms ease;
+      
+      /* 📱 TIPOGRAFÍA FLUIDA - Se adapta de móvil a tablet */
+      --text-xs: clamp(0.65rem, 0.6rem + 0.25vw, 0.75rem);
+      --text-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-base: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+      --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+      --text-xl: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+      --text-2xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+      --text-3xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+      
+      /* Espaciados fluidos */
+      --space-xs: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+      --space-sm: clamp(0.75rem, 0.6rem + 0.75vw, 1rem);
+      --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+      --space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+      --space-xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
     }
 
+    /* Reset y base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    input, select, textarea, button {
+      user-select: text;
+      -webkit-user-select: text;
     }
 
     @keyframes gradientShift {
@@ -89,6 +116,17 @@
       50% { opacity: 0.7; }
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    html {
+      font-size: 16px; /* Base para rem */
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     body {
       background: linear-gradient(-45deg, #f0f4ff, #e0e7ff, #dbeafe, #bfdbfe);
       background-size: 400% 400%;
@@ -97,12 +135,13 @@
       min-height: 100vh;
       width: 100%;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 0;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
       margin: 0;
       color: var(--gray-800);
       line-height: 1.5;
+      font-size: var(--text-base);
     }
 
     .app-container {
@@ -112,68 +151,90 @@
       margin: 0;
       padding: 0;
       position: relative;
+      /* 🖥️ EN COMPUTADORA: Comportarse como tablet (máx 768px) */
+      max-width: 100%;
     }
 
     /* ========== MENÚ PRINCIPAL ========== */
     .menu-container {
       width: 100%;
       min-height: 100vh;
-      padding: 2rem 1.5rem;
+      padding: var(--space-lg) var(--space-md);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
     }
 
     .content-wrapper {
       width: 100%;
-      max-width: 500px;
+      /* 📱 Móvil: 100%, 🖥️ Desktop: como tablet (máx 768px) */
+      max-width: min(100%, 768px);
       margin: 0 auto;
+      padding: 0 var(--space-sm);
       animation: float 6s ease-in-out infinite;
     }
 
     .logo-area {
-      margin-bottom: 2.5rem;
+      margin-bottom: var(--space-xl);
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       text-align: center;
+      width: 100%;
     }
 
     .logo-svg {
-      width: 110px;
-      height: 110px;
+      /* 📱 Tamaño fluido: 100px en móvil, hasta 130px en tablet */
+      width: clamp(100px, 20vw, 130px);
+      height: clamp(100px, 20vw, 130px);
       filter: drop-shadow(0 4px 12px rgba(30, 64, 175, 0.25));
       transition: transform var(--transition);
+      flex-shrink: 0;
     }
 
     .logo-svg:hover {
       transform: scale(1.05);
     }
 
+    .logo-svg img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
     .logo-text {
-      margin-top: 1rem;
-      font-size: 1.8rem;
+      margin-top: var(--space-sm);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-2xl);
       font-weight: 800;
       background: linear-gradient(135deg, var(--primary-700), var(--primary-500), var(--primary-400));
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
       letter-spacing: -0.5px;
+      line-height: 1.2;
+      text-align: center;
     }
 
     .logo-sub {
-      font-size: 0.9rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-sm);
       color: var(--gray-600);
       margin-top: 0.25rem;
       font-weight: 500;
+      text-align: center;
     }
 
     .buttons-group {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      margin: 2rem 0;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+      width: 100%;
+      max-width: 500px;
     }
 
     @media (min-width: 500px) {
@@ -184,15 +245,16 @@
 
     .btn {
       width: 100%;
-      padding: 1.1rem 1.5rem;
+      padding: var(--space-md) var(--space-lg);
       border: none;
       border-radius: var(--radius-xl);
-      font-size: 1.15rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-lg);
       font-weight: 700;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: clamp(10px, 2vw, 14px);
       cursor: pointer;
       transition: all var(--transition);
       box-shadow: var(--shadow-md);
@@ -200,6 +262,7 @@
       overflow: hidden;
       color: white;
       text-decoration: none;
+      white-space: nowrap;
     }
 
     .btn::before {
@@ -243,18 +306,21 @@
     }
 
     .btn span:first-child {
-      font-size: 1.3rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.3rem);
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+      flex-shrink: 0;
     }
 
     .footer-note {
-      margin-top: 2rem;
-      font-size: 0.75rem;
+      margin-top: var(--space-lg);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
       color: var(--gray-500);
       text-align: center;
-      padding-top: 1rem;
+      padding-top: var(--space-sm);
       border-top: 1px solid var(--gray-200);
       font-weight: 500;
+      width: 100%;
     }
 
     /* ========== HEADER COMÚN ========== */
@@ -262,32 +328,36 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.25rem;
+      padding: var(--space-sm) var(--space-md);
       background: white;
       border-bottom: 1px solid var(--gray-200);
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: var(--space-xs);
       position: sticky;
       top: 0;
       z-index: 50;
       box-shadow: var(--shadow-sm);
       backdrop-filter: blur(8px);
+      width: 100%;
     }
 
     .back-btn {
       background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
       color: white;
       border: none;
-      padding: 0.65rem 1.4rem;
+      padding: clamp(0.5rem, 1.5vw, 0.65rem) clamp(0.8rem, 2vw, 1.4rem);
       border-radius: var(--radius-full);
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.9rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-sm);
       transition: all var(--transition);
       box-shadow: var(--shadow);
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: clamp(4px, 1vw, 6px);
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .back-btn:hover {
@@ -301,30 +371,38 @@
     }
 
     .logo-small {
-      width: 44px;
+      width: clamp(40px, 8vw, 44px);
       height: auto;
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
     }
 
     .module h1 {
-      font-size: 1.3rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xl);
       font-weight: 700;
       background: linear-gradient(135deg, var(--primary-700), var(--primary-600));
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
       margin: 0;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ========== FORMULARIOS ========== */
     .card-form-modern {
       background: linear-gradient(145deg, var(--primary-800), var(--primary-900));
-      margin: 1rem;
-      padding: 1.5rem;
+      margin: var(--space-sm);
+      padding: var(--space-md);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-lg);
       border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
     }
 
     .card-form-ahorros {
@@ -335,20 +413,28 @@
     .form-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: var(--space-sm);
     }
 
     .input-group {
-      flex: 1;
-      min-width: 140px;
+      flex: 1 1 100%;
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: var(--space-xs);
+    }
+
+    @media (min-width: 480px) {
+      .input-group {
+        flex: 1 1 calc(50% - 0.5rem);
+        min-width: 140px;
+      }
     }
 
     .card-form-modern label {
       display: block;
-      font-size: 0.72rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
       text-transform: uppercase;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.92);
@@ -358,11 +444,12 @@
 
     .field-modern, .select-modern {
       width: 100%;
-      padding: 0.85rem 1rem;
+      padding: clamp(0.7rem, 1.5vw, 0.85rem) clamp(0.8rem, 2vw, 1rem);
       border-radius: var(--radius-lg);
       border: 2px solid transparent;
       background: white;
-      font-size: 1rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-base);
       font-weight: 500;
       color: var(--gray-800);
       outline: none;
@@ -393,19 +480,20 @@
       background: linear-gradient(135deg, var(--success-600), var(--success-500));
       color: white;
       border: none;
-      padding: 0.95rem;
+      padding: var(--space-md);
       border-radius: var(--radius-full);
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      margin-top: 1.25rem;
-      font-size: 1rem;
+      margin-top: var(--space-md);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-base);
       transition: all var(--transition);
       box-shadow: var(--shadow-md);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: clamp(6px, 1.5vw, 8px);
     }
 
     .btn-generar:hover {
@@ -420,16 +508,35 @@
 
     /* ========== TABLAS ========== */
     .table-container {
-      padding: 0 1rem 1.5rem 1rem;
+      padding: 0 var(--space-md) var(--space-lg);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      width: 100%;
+      /* Scrollbar sutil para indicar que hay más contenido */
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-400) transparent;
+    }
+
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--primary-400);
+      border-radius: 3px;
     }
 
     .financing-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      font-size: 0.82rem;
+      /* 📱 Tipografía fluida para tablas */
+      font-size: var(--text-sm);
+      min-width: 500px; /* Para forzar scroll horizontal en móviles */
       border: 1px solid var(--gray-200);
       border-radius: var(--radius-lg);
       overflow: hidden;
@@ -439,24 +546,29 @@
 
     .financing-table thead {
       background: linear-gradient(135deg, var(--primary-800), var(--primary-700));
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .financing-table th {
       color: white;
-      padding: 0.85rem 0.75rem;
+      padding: clamp(0.6rem, 1.5vw, 0.85rem) clamp(0.5rem, 1vw, 0.75rem);
       text-align: center;
       font-weight: 700;
-      font-size: 0.8rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       white-space: nowrap;
     }
 
     .financing-table td {
-      padding: 0.85rem 0.75rem;
+      padding: clamp(0.6rem, 1.5vw, 0.85rem) clamp(0.5rem, 1vw, 0.75rem);
       border-bottom: 1px solid var(--gray-100);
       text-align: center;
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .financing-table tbody tr {
@@ -481,8 +593,10 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      margin-top: 1rem;
-      font-size: 0.78rem;
+      margin-top: var(--space-sm);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
+      min-width: 450px;
       border-radius: var(--radius-lg);
       overflow: hidden;
       box-shadow: var(--shadow);
@@ -491,21 +605,27 @@
 
     .tabla-calendario thead {
       background: linear-gradient(135deg, var(--primary-800), var(--primary-700));
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .tabla-calendario th {
       color: white;
-      padding: 0.75rem 0.5rem;
+      padding: clamp(0.5rem, 1.2vw, 0.75rem) clamp(0.3rem, 0.8vw, 0.5rem);
       font-weight: 600;
-      font-size: 0.75rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
       text-transform: uppercase;
       letter-spacing: 0.3px;
+      white-space: nowrap;
     }
 
     .tabla-calendario td {
-      padding: 0.7rem 0.5rem;
+      padding: clamp(0.5rem, 1.2vw, 0.7rem) clamp(0.3rem, 0.8vw, 0.5rem);
       border-bottom: 1px solid var(--gray-100);
       text-align: center;
+      white-space: nowrap;
     }
 
     .tabla-calendario tbody tr:hover {
@@ -520,10 +640,11 @@
     .info-box {
       background: linear-gradient(135deg, var(--primary-50), white);
       border-left: 4px solid var(--primary-500);
-      padding: 1rem 1.25rem;
+      padding: var(--space-sm) var(--space-md);
       border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-      margin-top: 1.25rem;
-      font-size: 0.88rem;
+      margin-top: var(--space-md);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-sm);
       box-shadow: var(--shadow-sm);
       line-height: 1.6;
     }
@@ -534,10 +655,11 @@
 
     .dias-calculo {
       background: linear-gradient(135deg, var(--primary-100), white);
-      padding: 0.85rem 1.25rem;
+      padding: var(--space-sm) var(--space-md);
       border-radius: var(--radius-lg);
-      margin-top: 1rem;
-      font-size: 0.88rem;
+      margin-top: var(--space-sm);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-sm);
       color: var(--primary-800);
       font-weight: 600;
       text-align: center;
@@ -549,19 +671,20 @@
       background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
       color: white;
       border: none;
-      padding: 0.95rem;
+      padding: var(--space-md);
       border-radius: var(--radius-full);
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      margin-top: 1.25rem;
-      font-size: 1rem;
+      margin-top: var(--space-md);
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-base);
       transition: all var(--transition);
       box-shadow: var(--shadow-md);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: clamp(6px, 1.5vw, 8px);
     }
 
     .btn-imprimir:hover {
@@ -572,9 +695,10 @@
 
     .footer-text {
       text-align: center;
-      font-size: 0.7rem;
+      /* 📱 Tipografía fluida */
+      font-size: var(--text-xs);
       color: var(--gray-500);
-      padding: 1rem;
+      padding: var(--space-sm);
       border-top: 1px solid var(--gray-200);
       background: white;
       font-weight: 500;
@@ -589,19 +713,14 @@
       animation: fadeIn 0.3s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .module.active-module {
       display: block;
     }
 
-    /* Scrollbar personalizado */
+    /* Scrollbar personalizado para WebKit */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: clamp(6px, 1.5vw, 8px);
+      height: clamp(6px, 1.5vw, 8px);
     }
 
     ::-webkit-scrollbar-track {
@@ -628,47 +747,110 @@
       outline-offset: 2px;
     }
 
-    /* Responsive */
-    @media (min-width: 500px) {
-      .content-wrapper { max-width: 520px; }
-    }
-
+    /* 🖥️ MEDIA QUERIES - Computadora se comporta como tablet */
+    
+    /* Tablet y desktop pequeño: mantener layout de tablet */
     @media (min-width: 768px) {
-      .content-wrapper { max-width: 650px; }
-      .logo-svg { width: 130px; height: 130px; }
-      .logo-text { font-size: 2.2rem; }
-      .btn { padding: 1.3rem; font-size: 1.25rem; }
-      .card-form-modern { margin: 1.5rem; padding: 1.75rem; }
-      .table-container { padding: 0 1.5rem 2rem; }
-      .financing-table { font-size: 0.9rem; }
-      .module h1 { font-size: 1.5rem; }
-      .header-modern { padding: 1.25rem 1.5rem; }
+      .content-wrapper {
+        max-width: 768px; /* 🖥️ Forzar ancho de tablet en desktop */
+        padding: 0 var(--space-md);
+      }
+      
+      .logo-svg {
+        width: 130px;
+        height: 130px;
+      }
+      
+      .logo-text {
+        font-size: 1.875rem;
+      }
+      
+      .btn {
+        padding: 1.3rem 2rem;
+        font-size: 1.25rem;
+      }
+      
+      .card-form-modern {
+        margin: 1.5rem;
+        padding: 1.75rem;
+      }
+      
+      .table-container {
+        padding: 0 1.5rem 2rem;
+      }
+      
+      .financing-table {
+        font-size: 0.9rem;
+      }
+      
+      .module h1 {
+        font-size: 1.5rem;
+      }
+      
+      .header-modern {
+        padding: 1.25rem 1.5rem;
+      }
     }
 
+    /* Desktop grande: centrar como tablet, NO expandir */
     @media (min-width: 1024px) {
-      .content-wrapper { max-width: 750px; }
-      .card-form-modern { margin: 2rem auto; max-width: 92%; }
-      .table-container { max-width: 92%; margin: 0 auto; }
+      body {
+        /* Centrar contenido en pantallas grandes */
+        justify-content: center;
+        padding: var(--space-lg);
+      }
+      
+      .app-container {
+        /* 🖥️ Mantener comportamiento de tablet: NO expandir a full desktop */
+        max-width: 768px;
+        width: 100%;
+      }
+      
+      .content-wrapper {
+        max-width: 100%;
+      }
+      
+      .card-form-modern {
+        margin: 2rem auto;
+        max-width: 100%;
+      }
+      
+      .table-container {
+        max-width: 100%;
+        margin: 0 auto;
+      }
     }
 
+    /* 🖨️ Estilos de impresión */
     @media print {
       body {
         background: white !important;
         animation: none !important;
+        padding: 0 !important;
+        font-size: 10pt !important;
       }
+      
+      .app-container {
+        max-width: 100% !important;
+      }
+      
       .card-form-modern, .btn-generar, .btn-imprimir, .footer-text, 
       .header-modern .back-btn, .dias-calculo, .menu-container, .footer-note {
         display: none !important;
       }
+      
       .module.active-module { 
         display: block !important; 
         min-height: auto;
         background: white;
       }
+      
       .financing-table, .tabla-calendario {
         box-shadow: none !important;
         border: 1px solid #000 !important;
+        font-size: 9pt !important;
       }
+      
       .financing-table th, .tabla-calendario th {
         background: #1e40af !important;
         color: white !important;
@@ -677,8 +859,53 @@
       }
     }
 
-    .module {
-      will-change: transform, opacity;
+    /* 📱 Ajustes para pantallas muy pequeñas */
+    @media (max-width: 360px) {
+      :root {
+        --text-base: 0.85rem;
+        --text-sm: 0.75rem;
+        --text-xs: 0.65rem;
+      }
+      
+      .logo-text {
+        font-size: 1.4rem;
+      }
+      
+      .logo-sub {
+        font-size: 0.8rem;
+      }
+      
+      .btn {
+        font-size: 1rem;
+        padding: 1rem 1.25rem;
+      }
+      
+      .header-modern {
+        padding: 0.75rem 1rem;
+      }
+      
+      .back-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    /* 🌙 Modo oscuro opcional (respetar preferencia del sistema) */
+    @media (prefers-color-scheme: dark) {
+      /* Se puede activar si se desea modo oscuro automático */
+    }
+
+    /* Utilidad para elementos que necesitan scroll */
+    .scrollable {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Evitar zoom accidental en inputs en iOS */
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
     }
   </style>
 </head>
@@ -689,7 +916,6 @@
     <div class="content-wrapper">
       <div class="logo-area">
         <div class="logo-svg">
-          <!-- ✅ LOGO DEL MENÚ - Cambia "logo.png" por tu archivo real -->
           <img src="logo.png" alt="San Gaspar" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
         <div class="logo-text">SAN GASPAR R.L.</div>
@@ -720,7 +946,6 @@
         <span>←</span> Volver
       </button>
       <h1>COTIZADOR DE CRÉDITOS</h1>
-      <!-- ✅ LOGO DEL HEADER - Mismo archivo o diferente según prefieras -->
       <img src="logo.png" class="logo-small" onerror="this.style.display='none';" alt="logo">
     </div>
     <div class="card-form-modern">
@@ -829,14 +1054,11 @@
 
   // ==================== NAVEGACIÓN CON HISTORIAL ====================
   
-  // Función principal de navegación que actualiza el historial
   function navegarA(vista) {
-    // Ocultar todos primero
     menuPrincipal.style.display = 'none';
     moduleCredito.classList.remove('active-module');
     moduleAhorro.classList.remove('active-module');
     
-    // Mostrar el módulo correspondiente
     if (vista === 'credito') {
       moduleCredito.classList.add('active-module');
       renderizarTablaCreditos();
@@ -844,15 +1066,12 @@
       moduleAhorro.classList.add('active-module');
       document.getElementById('resultadosAhorro').style.display = 'none';
     } else {
-      // Volver al menú principal
       menuPrincipal.style.display = 'flex';
     }
     
-    // Actualizar el historial del navegador
     history.pushState({ vista: vista || 'menu' }, '', '#' + (vista || 'menu'));
   }
 
-  // Manejar el botón ATRÁS del teléfono/navegador
   window.addEventListener('popstate', function(event) {
     const estado = event.state;
     if (estado && estado.vista === 'credito') {
@@ -866,30 +1085,20 @@
       menuPrincipal.style.display = 'none';
       document.getElementById('resultadosAhorro').style.display = 'none';
     } else {
-      // Si no hay estado válido, volver al menú
       mostrarMenu();
     }
   });
 
-  // Función para volver al menú (usada por el botón "Volver")
   window.mostrarMenu = function() {
     menuPrincipal.style.display = 'flex';
     moduleCredito.classList.remove('active-module');
     moduleAhorro.classList.remove('active-module');
-    // Reemplazar estado actual para evitar retroceso infinito
     history.replaceState({ vista: 'menu' }, '', '#menu');
   }
 
-  // Funciones simplificadas para los botones
-  function mostrarCredito() {
-    navegarA('credito');
-  }
+  function mostrarCredito() { navegarA('credito'); }
+  function mostrarAhorro() { navegarA('ahorro'); }
 
-  function mostrarAhorro() {
-    navegarA('ahorro');
-  }
-
-  // Eventos de los botones principales
   document.getElementById('btnCredito').addEventListener('click', function(e) {
     e.preventDefault();
     mostrarCredito();
@@ -1210,18 +1419,14 @@
     });
   }
 
-  // Eventos de AHORROS
   document.getElementById('productoAhorro').addEventListener('change', actualizarCamposAhorro);
   document.getElementById('btnGenerarAhorro').addEventListener('click', calcularAhorro);
   document.getElementById('btnImprimirAhorro').addEventListener('click', imprimirAhorro);
   
   setupMoneyInput('montoAhorro');
 
-  // Inicializar con historial
   window.addEventListener('DOMContentLoaded', () => {
-    // Estado inicial del historial
     history.replaceState({ vista: 'menu' }, '', '#menu');
-    
     document.getElementById('monto').value = '';
     document.getElementById('montoAhorro').value = '';
     renderizarTablaCreditos();
@@ -1229,7 +1434,6 @@
     mostrarMenu();
   });
 
-  // Service Worker (opcional para PWA)
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for(let registration of registrations) registration.unregister();
