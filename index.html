@@ -3,10 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-  <meta name="theme-color" content="#0f4c81">
+  <meta name="theme-color" content="#0f172a">
   <title>San Gaspar | Finanzas</title>
   <link rel="manifest" href="manifest.json">
   <style>
+    :root {
+      /* Paleta Azul Oscuro Profesional */
+      --slate-950: #020617;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --blue-950: #172554;
+      --blue-900: #1e3a8a;
+      --blue-800: #1e40af;
+      --blue-700: #1d4ed8;
+      --blue-600: #2563eb;
+      --blue-500: #3b82f6;
+      --cyan-600: #0891b2;
+      --cyan-500: #06b6d4;
+      --emerald-600: #059669;
+      --emerald-500: #10b981;
+      
+      /* Efectos */
+      --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+      --shadow-card: 0 25px 50px -12px rgba(0, 0, 0 / 0.5);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -15,132 +38,220 @@
     }
 
     body {
-      background: linear-gradient(145deg, #dce3ec 0%, #c2d0e6 100%);
-      font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, var(--slate-950) 0%, var(--slate-900) 50%, var(--blue-950) 100%);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0;
-      margin: 0;
+      padding: 1rem;
+      color: #e2e8f0;
+      line-height: 1.6;
     }
 
     .app-container {
       width: 100%;
-      min-height: 100vh;
-      background: white;
-      margin: 0;
-      padding: 0;
+      max-width: 600px;
       position: relative;
+    }
+
+    /* Fondo con partículas sutiles */
+    .app-container::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     /* ========== MENÚ PRINCIPAL ========== */
     .menu-container {
       width: 100%;
-      min-height: 100vh;
-      background: white;
       padding: 2rem 1.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      align-items: center;
+      animation: fadeInUp 0.6s ease-out;
     }
 
-    .content-wrapper {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .logo-area {
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      margin-bottom: 3rem;
       text-align: center;
     }
 
+    .logo-wrapper {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--blue-600), var(--cyan-600));
+      border-radius: 50%;
+      padding: 4px;
+      box-shadow: 
+        0 0 60px rgba(59, 130, 246, 0.4),
+        inset 0 2px 10px rgba(255, 255, 255, 0.2);
+      position: relative;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 
+          0 0 60px rgba(59, 130, 246, 0.4),
+          inset 0 2px 10px rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        box-shadow: 
+          0 0 80px rgba(59, 130, 246, 0.6),
+          inset 0 2px 10px rgba(255, 255, 255, 0.2);
+      }
+    }
+
     .logo-svg {
-      width: 100px;
-      height: 100px;
+      width: 100%;
+      height: 100%;
+      background: var(--slate-900);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-svg svg {
+      width: 70%;
+      height: 70%;
     }
 
     .logo-text {
-      margin-top: 0.7rem;
-      font-size: 1.6rem;
+      font-size: 2.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #1E3C72, #2A5298);
+      background: linear-gradient(135deg, #fff 0%, var(--blue-400, #60a5fa) 100%);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
+      letter-spacing: -1px;
+      margin-bottom: 0.5rem;
     }
 
     .logo-sub {
-      font-size: 0.85rem;
-      color: #4a627a;
+      font-size: 1rem;
+      color: var(--slate-400, #94a3b8);
+      font-weight: 400;
     }
 
     .buttons-group {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      margin: 1.5rem 0;
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 450px;
+      margin-bottom: 2rem;
     }
 
-    @media (min-width: 500px) {
+    @media (min-width: 640px) {
       .buttons-group {
         flex-direction: row;
       }
     }
 
     .btn {
-      width: 100%;
-      padding: 1rem;
+      flex: 1;
+      padding: 1.5rem 2rem;
       border: none;
-      border-radius: 3rem;
-      font-size: 1.2rem;
+      border-radius: 1rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .btn:hover::before {
+      transform: translateX(100%);
     }
 
     .btn-credito {
-      background: linear-gradient(105deg, #1b3b6f, #2c5282);
-      color: white;
+      background: linear-gradient(135deg, var(--blue-700), var(--blue-900));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4);
+    }
+
+    .btn-credito:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(30, 58, 138, 0.5);
+      border-color: rgba(59, 130, 246, 0.5);
     }
 
     .btn-ahorros {
-      background: linear-gradient(105deg, #2b6e4c, #1e5940);
-      color: white;
+      background: linear-gradient(135deg, var(--emerald-600), var(--cyan-600));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 10px 30px rgba(5, 150, 105, 0.4);
+    }
+
+    .btn-ahorros:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(5, 150, 105, 0.5);
+      border-color: rgba(16, 185, 129, 0.5);
     }
 
     .btn:active {
-      transform: scale(0.97);
+      transform: translateY(-1px);
+    }
+
+    .btn span:first-child {
+      font-size: 1.5rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     }
 
     .feedback {
-      margin-top: 1.5rem;
-      padding: 0.8rem;
-      background: #f8fafd;
-      border-radius: 1.5rem;
-      font-size: 0.9rem;
+      width: 100%;
+      max-width: 450px;
+      padding: 1.25rem;
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      font-size: 1rem;
       text-align: center;
-      border-left: 4px solid #2c5282;
-    }
-
-    .footer-note {
-      margin-top: 1.5rem;
-      font-size: 0.65rem;
-      color: #5d6f88;
-      text-align: center;
-      padding-top: 0.8rem;
-      border-top: 1px solid #e2e8f0;
+      color: var(--slate-300);
+      box-shadow: var(--shadow-glow);
     }
 
     /* ========== HEADER COMÚN ========== */
@@ -148,32 +259,50 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem;
-      background: white;
-      border-bottom: 1px solid #eef2fa;
-      flex-wrap: wrap;
-      gap: 0.8rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-radius: 0 0 1.5rem 1.5rem;
     }
 
     .back-btn {
-      background: #0f4c81;
+      background: linear-gradient(135deg, var(--blue-700), var(--blue-900));
       color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 2rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+      border-color: rgba(59, 130, 246, 0.5);
     }
 
     .logo-small {
-      width: 40px;
-      height: auto;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(59, 130, 246, 0.3);
     }
 
     .module h1 {
-      font-size: 1.2rem;
-      background: linear-gradient(135deg, #0f4c81, #1e6aa5);
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--blue-400));
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
@@ -181,159 +310,269 @@
 
     /* ========== FORMULARIOS ========== */
     .card-form-modern {
-      background: #10436f;
-      margin: 1rem;
-      padding: 1.2rem;
-      border-radius: 1.2rem;
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(16px);
+      margin: 1.5rem;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      box-shadow: var(--shadow-card);
     }
 
     .card-form-ahorros {
-      background: #065f46;
+      background: rgba(6, 78, 59, 0.4);
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .form-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 1.25rem;
     }
 
     .input-group {
       flex: 1;
-      min-width: 150px;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .card-form-modern label {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.85);
-      margin-bottom: 0.3rem;
+      color: var(--slate-400);
+      letter-spacing: 0.5px;
     }
 
     .field-modern, .select-modern {
       width: 100%;
-      padding: 0.7rem;
+      padding: 1rem 1.25rem;
       border-radius: 1rem;
-      border: none;
-      background: white;
-      font-size: 0.9rem;
+      border: 2px solid rgba(148, 163, 184, 0.1);
+      background: rgba(15, 23, 42, 0.6);
+      font-size: 1rem;
       font-weight: 500;
-      color: #0a2b44;
+      color: white;
       outline: none;
+      transition: var(--transition);
+    }
+
+    .field-modern::placeholder {
+      color: var(--slate-500);
     }
 
     .field-modern:focus, .select-modern:focus {
-      box-shadow: 0 0 0 2px rgba(255,215,0,0.5);
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .select-modern {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 1rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25em 1.25em;
+      padding-right: 3rem;
+      color: white;
+    }
+
+    .select-modern option {
+      background: var(--slate-800);
+      color: white;
     }
 
     .btn-generar {
-      background: #28a745;
+      background: linear-gradient(135deg, var(--emerald-600), var(--cyan-600));
       color: white;
       border: none;
-      padding: 0.8rem;
-      border-radius: 2rem;
+      padding: 1.1rem;
+      border-radius: 1rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      margin-top: 1rem;
-      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
     }
 
     .btn-generar:hover {
-      background: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(5, 150, 105, 0.4);
     }
 
     /* ========== TABLAS ========== */
     .table-container {
-      padding: 0 1rem 1rem 1rem;
+      padding: 0 1.5rem 2rem;
       overflow-x: auto;
     }
 
     .financing-table {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-      border: 1px solid #e1e8f0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .financing-table thead {
+      background: linear-gradient(135deg, var(--blue-900), var(--slate-800));
     }
 
     .financing-table th {
-      background: #10436f;
       color: white;
-      padding: 0.6rem;
+      padding: 1rem 0.75rem;
       text-align: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.3);
     }
 
     .financing-table td {
-      padding: 0.6rem;
-      border: 1px solid #e1e8f0;
+      padding: 1rem 0.75rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.05);
       text-align: center;
+      color: var(--slate-300);
+      font-weight: 500;
     }
 
-    .col-plazo { color: #0f4c81; font-weight: 700; }
-    .col-cuota { color: #059669; font-weight: 800; }
-    .col-interes { color: #ea580c; font-weight: 600; }
-    .col-total { color: #7c3aed; font-weight: 800; }
+    .financing-table tbody tr {
+      transition: var(--transition);
+    }
+
+    .financing-table tbody tr:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .financing-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-plazo { 
+      color: var(--blue-400); 
+      font-weight: 700; 
+    }
+    .col-cuota { 
+      color: var(--emerald-400); 
+      font-weight: 700; 
+    }
+    .col-interes { 
+      color: #f59e0b; 
+      font-weight: 600; 
+    }
+    .col-total { 
+      color: white; 
+      font-weight: 800; 
+    }
 
     /* Tabla calendario */
     .tabla-calendario {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      font-size: 0.7rem;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .tabla-calendario thead {
+      background: linear-gradient(135deg, var(--blue-900), var(--slate-800));
     }
 
     .tabla-calendario th {
-      background: #10436f;
       color: white;
-      padding: 6px;
+      padding: 1rem 0.5rem;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
     .tabla-calendario td {
-      padding: 5px;
-      border: 1px solid #ddd;
+      padding: 0.85rem 0.5rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.05);
       text-align: center;
+      color: var(--slate-300);
+    }
+
+    .tabla-calendario tbody tr:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .tabla-calendario tfoot {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(30, 41, 59, 0.6));
+      font-weight: 700;
     }
 
     .info-box {
-      background: #e3f2fd;
-      border-left: 4px solid #0056b3;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-size: 0.8rem;
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(8px);
+      border-left: 4px solid var(--blue-500);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 1rem 1rem 0;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--slate-300);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .info-box strong {
+      color: white;
     }
 
     .dias-calculo {
-      background: #e8f4f8;
-      padding: 8px;
-      border-radius: 8px;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: #0f4c81;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: var(--blue-300);
       font-weight: 600;
       text-align: center;
+      border: 1px solid rgba(59, 130, 246, 0.2);
     }
 
     .btn-imprimir {
-      background: #28a745;
+      background: linear-gradient(135deg, var(--blue-700), var(--blue-900));
       color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 2rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 1.1rem;
+      border-radius: 1rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      margin-top: 1rem;
-      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(30, 58, 138, 0.3);
     }
 
-    .footer-text {
-      text-align: center;
-      font-size: 0.6rem;
-      color: #6c86a3;
-      padding: 0.8rem;
-      border-top: 1px solid #eef2fa;
+    .btn-imprimir:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(30, 58, 138, 0.4);
     }
 
     /* Módulos */
@@ -341,7 +580,19 @@
       display: none;
       width: 100%;
       min-height: 100vh;
-      background: white;
+      background: transparent;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
     }
 
     .module.active-module {
@@ -349,28 +600,63 @@
     }
 
     /* Responsive */
-    @media (min-width: 768px) {
-      .content-wrapper { max-width: 600px; }
-      .logo-svg { width: 120px; height: 120px; }
-      .logo-text { font-size: 2rem; }
-      .btn { padding: 1.2rem; font-size: 1.3rem; }
-      .card-form-modern { margin: 1.5rem; padding: 1.5rem; }
-      .table-container { padding: 0 1.5rem 1.5rem; }
-      .financing-table { font-size: 0.85rem; }
-      .module h1 { font-size: 1.4rem; }
+    @media (min-width: 640px) {
+      .logo-text { font-size: 2.75rem; }
+      .btn { padding: 1.75rem 2.5rem; font-size: 1.3rem; }
     }
 
-    @media (min-width: 1024px) {
-      .content-wrapper { max-width: 700px; }
-      .card-form-modern { margin: 2rem auto; max-width: 90%; }
-      .table-container { max-width: 90%; margin: 0 auto; }
+    @media (min-width: 768px) {
+      .card-form-modern { margin: 2rem; padding: 2.5rem; }
+      .table-container { padding: 0 2rem 2.5rem; }
     }
 
     @media print {
-      .card-form-modern, .btn-generar, .btn-imprimir, .footer-text, .header-modern .back-btn, .dias-calculo {
+      body {
+        background: white !important;
+      }
+      .card-form-modern, .btn-generar, .btn-imprimir, 
+      .header-modern .back-btn, .dias-calculo, .menu-container {
         display: none !important;
       }
-      .module.active-module { display: block !important; }
+      .module.active-module { 
+        display: block !important; 
+        background: white;
+      }
+      .financing-table, .tabla-calendario {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+        background: white !important;
+      }
+      .financing-table th, .tabla-calendario th {
+        background: #1e3a8a !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .financing-table td, .tabla-calendario td {
+        color: #000 !important;
+      }
+    }
+
+    /* Scrollbar personalizado */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--slate-900);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--blue-700);
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--blue-600);
     }
   </style>
 </head>
@@ -378,50 +664,50 @@
 <div class="app-container">
   <!-- MENÚ PRINCIPAL -->
   <div id="menuPrincipal" class="menu-container">
-    <div class="content-wrapper">
-      <div class="logo-area">
+    <div class="logo-area">
+      <div class="logo-wrapper">
         <div class="logo-svg">
+          <!-- CAMBIAR LOGO AQUÍ - Ver instrucciones abajo -->
           <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="46" fill="url(#gradCircle)" stroke="#ffffff" stroke-width="2.2" />
+            <circle cx="50" cy="50" r="46" fill="url(#gradCircle)" stroke="#3b82f6" stroke-width="2" />
             <defs>
               <linearGradient id="gradCircle" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#1E3C72" />
-                <stop offset="100%" stop-color="#2A5298" />
+                <stop offset="0%" stop-color="#1e3a8a" />
+                <stop offset="100%" stop-color="#3b82f6" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="48" r="20" fill="#F9D976" stroke="#E6B422" stroke-width="1.5" />
-            <text x="50" y="56" font-family="Arial" font-weight="bold" font-size="20" fill="#2c3e4e" text-anchor="middle">$</text>
+            <circle cx="50" cy="48" r="20" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5" />
+            <text x="50" y="56" font-family="Arial" font-weight="bold" font-size="20" fill="#0f172a" text-anchor="middle">$</text>
           </svg>
         </div>
-        <div class="logo-text">San Gaspar</div>
-        <div class="logo-sub">elige tu camino financiero</div>
       </div>
+      <h1 class="logo-text">San Gaspar</h1>
+      <p class="logo-sub">elige tu camino financiero</p>
+    </div>
 
-      <div class="buttons-group">
-        <button id="btnCredito" class="btn btn-credito">
-          <span>💳</span>
-          <span>Crédito</span>
-        </button>
-        <button id="btnAhorros" class="btn btn-ahorros">
-          <span>🏦</span>
-          <span>Ahorros</span>
-        </button>
-      </div>
+    <div class="buttons-group">
+      <button id="btnCredito" class="btn btn-credito">
+        <span>💳</span>
+        <span>Crédito</span>
+      </button>
+      <button id="btnAhorros" class="btn btn-ahorros">
+        <span>🏦</span>
+        <span>Ahorros</span>
+      </button>
+    </div>
 
-      <div id="feedbackArea" class="feedback">
-        <span>✨</span>
-        <span id="feedbackMessage">Selecciona una opción</span>
-      </div>
-      <div class="footer-note">
-        📱 Gestión inteligente | Crédito · Ahorros
-      </div>
+    <div id="feedbackArea" class="feedback">
+      <span>✨</span>
+      <span id="feedbackMessage">Selecciona una opción</span>
     </div>
   </div>
 
   <!-- MÓDULO CRÉDITOS -->
   <div id="module-creditos" class="module">
     <div class="header-modern">
-      <button class="back-btn" onclick="mostrarMenu()">← Volver</button>
+      <button class="back-btn" onclick="mostrarMenu()">
+        <span>←</span> Volver
+      </button>
       <h1>COTIZADOR SG</h1>
       <img src="logo.png" class="logo-small" onerror="this.style.display='none';" alt="logo">
     </div>
@@ -445,16 +731,17 @@
     <div class="table-container">
       <table class="financing-table" id="tablaResultados">
         <thead><tr><th>PLAZO</th><th>CUOTA MENSUAL</th><th>TOTAL INTERÉS</th><th>TOTAL A PAGAR</th></tr></thead>
-        <tbody id="tablaBody"><tr><td colspan="4" style="text-align:center; padding: 1.5rem;">💰 Ingrese un monto</td></tr></tbody>
+        <tbody id="tablaBody"><tr><td colspan="4" style="text-align:center; padding: 2rem; color: var(--slate-400);">💰 Ingrese un monto</td></tr></tbody>
       </table>
     </div>
-    <div class="footer-text">COTIZADOR SG v2.1 · ECM</div>
   </div>
 
   <!-- MÓDULO AHORROS -->
   <div id="module-ahorros" class="module">
     <div class="header-modern">
-      <button class="back-btn" onclick="mostrarMenu()">← Volver</button>
+      <button class="back-btn" onclick="mostrarMenu()">
+        <span>←</span> Volver
+      </button>
       <h1>COTIZADOR DE AHORROS</h1>
       <img src="logo.png" class="logo-small" onerror="this.style.display='none';" alt="logo">
     </div>
@@ -504,16 +791,19 @@
           <input type="date" id="fechaFinAhorro" class="field-modern" value="">
         </div>
       </div>
-      <button id="btnGenerarAhorro" class="btn-generar">🧮 Generar Cálculos</button>
+      <button id="btnGenerarAhorro" class="btn-generar">
+        <span>🧮</span> Generar Cálculos
+      </button>
     </div>
 
     <div class="table-container" id="resultadosAhorro" style="display:none;">
       <div id="diasCalculoContainer" class="dias-calculo" style="display:none;"></div>
       <div id="tablaCalendarioContainer"></div>
       <div id="infoBoxAhorro" class="info-box"></div>
-      <button id="btnImprimirAhorro" class="btn-imprimir" style="display:none;">🖨️ Imprimir Cotización</button>
+      <button id="btnImprimirAhorro" class="btn-imprimir" style="display:none;">
+        <span>🖨️</span> Imprimir Cotización
+      </button>
     </div>
-    <div class="footer-text">COTIZADOR SG · Rendimientos estimados · ISR 10% aplicado</div>
   </div>
 </div>
 
@@ -533,7 +823,7 @@
     menuPrincipal.style.display = 'none';
     moduleCredito.classList.add('active-module');
     moduleAhorro.classList.remove('active-module');
-    document.getElementById('feedbackMessage').innerHTML = "💳 Crédito seleccionado";
+    document.getElementById('feedbackMessage').innerHTML = "💳 Módulo de Crédito seleccionado";
     renderizarTablaCreditos();
   }
 
@@ -541,8 +831,7 @@
     menuPrincipal.style.display = 'none';
     moduleAhorro.classList.add('active-module');
     moduleCredito.classList.remove('active-module');
-    document.getElementById('feedbackMessage').innerHTML = "🏦 Ahorros seleccionado";
-    // Limpiar resultados al entrar
+    document.getElementById('feedbackMessage').innerHTML = "🏦 Módulo de Ahorros seleccionado";
     document.getElementById('resultadosAhorro').style.display = 'none';
   }
 
@@ -580,7 +869,7 @@
     const tbody = document.getElementById("tablaBody");
     
     if (montoRaw === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 1.5rem;">💰 Ingrese un monto</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 2rem; color: var(--slate-400);">💰 Ingrese un monto</td></tr>`;
       return;
     }
 
@@ -672,7 +961,7 @@
     const brutoPer = r.bruto / totalPer;
     const isrPer = r.isr / totalPer;
     
-    let html = `<h4 style="margin-top: 15px; color: #0f4c81; text-align: center;">📅 Calendario de Pagos - ${config.nombre}</h4>
+    let html = `<h4 style="margin: 2rem 0 1rem; color: white; text-align: center; font-weight: 700;">📅 Calendario de Pagos - ${config.nombre}</h4>
     <table class="tabla-calendario">
       <thead><tr><th>#</th><th>Fecha</th><th>Interés Bruto</th><th>ISR (10%)</th><th>Interés Neto</th></tr></thead>
       <tbody>`;
@@ -683,14 +972,14 @@
         <td>${i}</td>
         <td>${formatearFecha(fecha)}</td>
         <td>${formatMoney(brutoPer)}</td>
-        <td style="color:#dc3545;">- ${formatMoney(isrPer)}</td>
-        <td style="color:#28a745;">${formatMoney(brutoPer - isrPer)}</td>
+        <td style="color:#ef4444; font-weight: 600;">- ${formatMoney(isrPer)}</td>
+        <td style="color:#10b981; font-weight: 700;">${formatMoney(brutoPer - isrPer)}</td>
       </tr>`;
       fecha = agregarMeses(fecha, per);
     }
     
-    html += `<tfoot style="background:#e8f4f8;">
-      <tr><td colspan="2"><strong>TOTALES</strong></td><td><strong>${formatMoney(r.bruto)}</strong></td><td><strong>- ${formatMoney(r.isr)}</strong></td><td><strong>${formatMoney(r.neto)}</strong></td></tr>
+    html += `<tfoot>
+      <tr><td colspan="2"><strong>TOTALES</strong></td><td><strong>${formatMoney(r.bruto)}</strong></td><td><strong style="color:#ef4444;">- ${formatMoney(r.isr)}</strong></td><td><strong style="color:#10b981;">${formatMoney(r.neto)}</strong></td></tr>
     </tfoot></table>`;
     return html;
   }
@@ -762,34 +1051,31 @@
     const diasContainer = document.getElementById('diasCalculoContainer');
     const config = productosAhorro[producto];
     
-    // Mostrar días de cálculo
     if (config.muestraDias && r.dias) {
       const fechaInicio = document.getElementById('fechaInicioAhorro').value;
       const fechaFin = document.getElementById('fechaFinAhorro').value;
       diasContainer.style.display = 'block';
-      diasContainer.innerHTML = `📆 Días de cálculo: ${r.dias} días (${fechaInicio} hasta ${fechaFin})`;
+      diasContainer.innerHTML = `📆 Días de cálculo: <strong>${r.dias} días</strong> (${fechaInicio} hasta ${fechaFin})`;
     } else {
       diasContainer.style.display = 'none';
     }
     
-    // Calendario
     if (config.requiereTabla && r.frecuencia && r.plazo) {
       calendarioContainer.innerHTML = generarTablaCalendario(r, producto);
     } else {
       calendarioContainer.innerHTML = '';
     }
     
-    // Botón imprimir - solo para productos específicos
     btnImprimir.style.display = config.muestraImprimir === true ? 'block' : 'none';
     
     infoBox.innerHTML = `<strong>ℹ️ Detalles del cálculo:</strong><br>
-      • Producto: ${config.nombre}<br>
-      • Monto invertido: ${formatMoney(r.monto)}<br>
-      • Tasa anual: ${r.tasa}%<br>
+      • Producto: <strong>${config.nombre}</strong><br>
+      • Monto invertido: <strong>${formatMoney(r.monto)}</strong><br>
+      • Tasa anual: <strong>${r.tasa}%</strong><br>
       • Interés bruto: ${formatMoney(r.bruto)}<br>
-      • ISR (10%): -${formatMoney(r.isr)}<br>
-      • Interés neto: ${formatMoney(r.neto)}<br>
-      • <strong>Total al vencimiento: ${formatMoney(r.total)}</strong>`;
+      • ISR (10%): <span style="color:#ef4444;">-${formatMoney(r.isr)}</span><br>
+      • Interés neto: <span style="color:#10b981; font-weight:700;">${formatMoney(r.neto)}</span><br>
+      • <strong style="color:white; font-size:1.1em;">Total al vencimiento: ${formatMoney(r.total)}</strong>`;
     
     container.style.display = 'block';
   }
@@ -822,10 +1108,8 @@
     
     if (producto === 'corriente' || producto === 'infanto') {
       fechasGroup.style.display = 'flex';
-      // Fecha inicio automática con la fecha actual (hoy)
       const hoy = new Date().toISOString().split('T')[0];
       document.getElementById('fechaInicioAhorro').value = hoy;
-      // Fecha final en blanco para que el usuario la seleccione
       document.getElementById('fechaFinAhorro').value = '';
     } else {
       plazoGroup.style.display = 'flex';
@@ -864,14 +1148,12 @@
     });
   }
 
-  // Eventos de AHORROS
   document.getElementById('productoAhorro').addEventListener('change', actualizarCamposAhorro);
   document.getElementById('btnGenerarAhorro').addEventListener('click', calcularAhorro);
   document.getElementById('btnImprimirAhorro').addEventListener('click', imprimirAhorro);
   
   setupMoneyInput('montoAhorro');
 
-  // Inicializar
   window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('monto').value = '';
     document.getElementById('montoAhorro').value = '';
